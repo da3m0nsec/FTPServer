@@ -25,7 +25,6 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "common.h"
 #include "ClientConnection.h"
 
 #define COMMAND(cmd) strcmp(command_, cmd) == 0
@@ -85,13 +84,18 @@ int connect_TCP(uint32_t ip_address, uint16_t port)
     return socketFd;
 }
 
-bool userExists (char* username){
+bool userExists (char* username)
+{
     std::ifstream file("../database/userlist.txt");
     std::string tmp;
-    if(file.good()){
-        while(!file.eof()){ 
+
+    if(file.good())
+    {
+        while(!file.eof())
+        {
             file >> tmp;
-            if (strcmp(tmp.c_str(), username) == 0){
+            if (strcmp(tmp.c_str(), username) == 0)
+            {
                 file.close();
                 return true;
             }
@@ -100,7 +104,6 @@ bool userExists (char* username){
     file.close();
     return false;
 }
-
 
 void ClientConnection::stop()
 {
@@ -128,15 +131,16 @@ void ClientConnection::WaitForRequests()
 
         if (COMMAND("USER"))
         {
-            //fscanf(fd_, "%s", arg_);
             if(fscanf(fd_, "%s", arg_) == 1)
             {
-                //if(strcmp("anon", arg_) == 0)
-                if(userExists(arg_)){
+
+                if(userExists(arg_))
+                {
                     fprintf(fd_, "331 User name ok, need password\n");
                     fflush(fd_);
                 }
-                else{
+                else
+                {
                     fprintf(fd_, "430 Invalid username or password\n");
                     fflush(fd_);
                 }
@@ -154,17 +158,23 @@ void ClientConnection::WaitForRequests()
         }
         else if (COMMAND("PASS"))
         {
-            //fscanf(fd_, "%s", arg_);
             if(fscanf(fd_, "%s", arg_) == 1)
             {
-                if(strcmp("passwd", arg_) == 0){
+                if(strcmp("passwd", arg_) == 0)
+                {
                     fprintf(fd_, "230 User logged in\n");
                 }
-                else{
+                else
+                {
                     fprintf(fd_, "430 Invalid username or password\n");
                     fflush(fd_);
                 }
-            } 
+            }
+            else
+            {
+                fprintf(fd_, "501 Syntax error in parameters or arguments.\n");
+                fflush(fd_);
+            }
         }
         else if (COMMAND("PORT"))
         {
@@ -220,7 +230,7 @@ void ClientConnection::WaitForRequests()
             fprintf(fd_, "227 Entering Passive Mode (%u,%u,%u,%u,%u,%u).\n", 127u, 0u, 0u, 1u, p0, p1);
             fflush(fd_);
             
-            data_socket_ = accept(socketFd,(struct sockaddr *)&output_addr, &od_len);
+            data_socket_ = accept(socketFd, reinterpret_cast<sockaddr*>(&output_addr), &od_len);
         }
         else if (COMMAND("CWD"))
         {
