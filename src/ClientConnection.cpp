@@ -143,6 +143,9 @@ void ClientConnection::WaitForRequests()
                 {
                     fprintf(fd_, "430 Invalid username or password\n");
                     fflush(fd_);
+	 	    fprintf(fd_, "221 Service closing control connection.\n");
+            	    fflush(fd_);
+            	    stop();
                 }
             }   
             else
@@ -168,6 +171,9 @@ void ClientConnection::WaitForRequests()
                 {
                     fprintf(fd_, "430 Invalid username or password\n");
                     fflush(fd_);
+	            fprintf(fd_, "221 Service closing control connection.\n");
+                    fflush(fd_);
+                    stop();
                 }
             }
             else
