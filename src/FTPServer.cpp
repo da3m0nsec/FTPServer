@@ -14,7 +14,6 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include "common.h"
 #include "ClientConnection.h"
 #include "FTPServer.h"
 
