@@ -12,7 +12,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all: ftp_server
 
-$(ODIR)/ClientConnection.o: $(ODIR)/ClientConnection.cpp $(IDIR)/ClientConnection.h $(IDIR)/common.h
+$(ODIR)/ClientConnection.o: $(ODIR)/ClientConnection.cpp $(IDIR)/ClientConnection.h
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/FTPServer.o: $(ODIR)/FTPServer.cpp $(IDIR)/FTPServer.h $(IDIR)/ClientConnection.h
